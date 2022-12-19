@@ -17,6 +17,7 @@ const topicSchema = mongoose.Schema({
     },
     percentage:{
         type: Number,
+        default : 20
     }
 }, { timestamps: true });
 

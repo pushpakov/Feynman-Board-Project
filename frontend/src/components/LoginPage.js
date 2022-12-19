@@ -28,9 +28,9 @@ const LoginPage = () => {
         try {
             const resp = await axios.post("http://localhost:3001/login", user);
             localStorage.setItem("token", ([resp.data.data.token, resp.data.data.userId]));
-            window.location = "/getTopics";
+            window.location = "/dashboard";
             alert(resp.data.message);
-            navigate("/getTopics", { replace: true });
+            navigate("/dashboard", { replace: true });
         }
         catch (err) {
             alert(err.response.data.message)

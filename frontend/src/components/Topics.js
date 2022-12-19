@@ -1,74 +1,61 @@
 import React, { useEffect, useState } from 'react'
-import url from "../config"
-import cookie from "js-cookie"
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import "./style.css";
 
 const Topics = () => {
-    let navigate = useNavigate();
-    let userName = cookie.get("userName")
-    const api = `${url.BaseUrl}/getTopics/${userName}`
+    var [topic, setTopic] = useState();
 
-    const [userData, setUserData] = useState("");
+    useEffect(() => {
+        handleOrderData()
+            .then(res => setTopic(res))
 
-    const fetchApiData = async (URL) => {
+    }, []);
+
+
+
+    const handleOrderData = async () => {
         try {
-            let res = await fetch(URL)
-            let data = await res.json()
-            setUserData(data)
+            let data = localStorage.getItem("token");
+            let result = await axios.get(`http://localhost:3001/user/${data.split(",")[1]}/dashboard`, {
+                headers: {
+                    authorization: (data.split(","))[0],
+                    Accept: 'application/json',
+                },
+            })
+
+            let newRes = result.data
+            return newRes.data
         }
         catch (err) {
-            console.log(err)
+            alert(err.response.data.message)
         }
-    }
+    };
+    if (!topic) return (<div>No Record Found</div>)
 
-    const logout = () => {
-        cookie.remove("userName")
-        navigate(`/`, { replace: true });
-    }
-    useEffect(() => {
-        fetchApiData(api)
-    }, [api]);
-
-    console.log(userData)
 
 
     return (
-        <div>
-            <p align="right">
-                <input type="button" value="Logout" onClick={logout} />
-            </p>
+        <div className='login-page'>
+            <nav className='form'>
+                <h1>FEYNMAN BOARD</h1>
+                <Link to="/addtopic">
+                    <button className='white_btn'>Add a new Topic</button>
+                </Link>
+            </nav>
             <div className="login-page">
-                <div className="form">
-                    <h3>Welcome ! {userData.name} <NavLink to="/topic">Add Topic</NavLink></h3>
-                    <form className="login-form">
-                        <label>User_Name</label><input type="text" placeholder="Enter userName" name="userName" value={userData.userName} />
-                        <label>User_id</label><input type="text" placeholder="Enter userName" name="userName" value={userData._id} />
-
-                        {/* {userData.topics.map((x) =>
-                            <div key={x._id}>
-                                <h3>{x.title}</h3>
-                                <p>{x.details}</p>
-                            </div>
-                        )} */}
-                    </form>
-                </div>
+                {topic.map((val, index) => {
+                    return <div className="eachCont" key={index} >
+                        <h2>Topic : {val.topic}</h2>
+                        <p>{val.description}</p>
+                        <h4>Understanding of the topics:</h4>{val.percentage +"%"}
+                    </div>
+                })}
             </div>
-
-
-            {/* <h1>Welcome {userData.name}</h1>
-            <h2>User Name - {userData.userName}</h2>
-            <h3>User_id -  {userData._id}</h3> */}
-            {/* <h3>User_id -  {userData.topics[0]._id}</h3> */}
-
-            {/* {userData.topics.map((x) =>
-                <div key={x._id}>
-                    <h3>{x.title}</h3>
-                    <p>{x.details}</p>
-                </div>
-            )} */}
-
+            <nav className='footer'></nav>
         </div>
-    )
+
+    );
 }
 
 export default Topics

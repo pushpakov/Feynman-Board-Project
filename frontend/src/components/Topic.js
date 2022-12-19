@@ -1,66 +1,78 @@
 import React, { useState } from "react"
-import { NavLink } from "react-router-dom";
-import "./style2.css"
+import { useNavigate } from "react-router-dom";
+import "./topic.css"
 import axios from "axios"
-import url from "../config"
-import cookie from "js-cookie"
-let userNameC = cookie.get("userName")
-const api = `${url.BaseUrl}/addTopic/${userNameC}`;
-console.log(api)
 
 const Topic = () => {
-    const [userN] = useState(userNameC)
-    const [title, setTitle] = useState("")
-    const [details, setDetails] = useState("")
-    const [result, setResult] = useState("")
-    const [isError, setIsError] = useState("")
+    const navigate = useNavigate();
 
-    const handle = async (e) => {
-        e.preventDefault()
+    const [data, setData] = useState({
+        topic: '',
+        description: ''
+    });     
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setData({
+            ...data,
+            [name]: value
+        })
+    };
+
+    const handleSubmit = async () => {
         try {
-            let response = await axios.post(api, {
-                userName: userN,
-                title: title,
-                details: details,
+            let token = localStorage.getItem("token");
+            console.log(data)
+            let result = await axios.post(`http://localhost:3001/user/${token.split(",")[1]}/addtopic`,
+                {
+                    topic: data.topic,
+                    description: data.description
+                }, {
+                headers: {
+                    authorization: (token.split(","))[0],
+                    Accept: 'application/json',
+                },
             })
-            console.log(response)
-            setResult("Added Successfully")
-            console.log("Sucess")
+            alert(result.data.message);
+            navigate("/dashboard", { replace: true });
         }
         catch (err) {
-            console.log("Unsucess")
-            console.log(err.response.data)
-            setIsError(err.response.data)
+            alert(err.response.data.message)
         }
-
     }
-    console.log(result)
 
-    return <div>
 
-        <div className="login-page2">
-            <div className="form2">
-                <h2>Add Topic <NavLink to="/getTopics">Back</NavLink></h2>
-                {result !== "" && <div className="alert alert-success" role="alert">{result}</div>}
-                {isError !== "" && <div className="alert alert-danger" role="alert">{isError}</div>}
-                <form className="login-form"
-                    onSubmit={handle}
-                    method="POST">
-                    {/* <input type="text" placeholder="Enter userName" name="userName"
-                        value={userNameC} onChange={(e) => setUserN(e.target.value)}
-                    /> */}
-                    <input type="text" placeholder="Enter title" name="title"
-                        value={title} onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <input type="text" placeholder="Text Area" name="details"
-                        value={details} onChange={(e) => setDetails(e.target.value)}
-                    />
-                    <button>Add</button>
-                    <p>Note: Refresh your page before adding any Topic.</p>
+    return (
+        <div className='main_container'>
+            <div className='addtopic_container'>
+                <div className='left'>
+                    <h2>Level of Understanding</h2>
+                    <button type="submit" className='greenish_btn'>Understood</button>
+                    <button type="submit" className='yellow_btn'>Somewhat Understood</button>
+                    <button type="submit" className='blue_btn'>Not Clear</button>
+                    <button type="submit" className='red_btn'>What Rubbish</button>
+                </div>
 
-                </form>
+                <div className='right'>
+
+                    <div className='form_container' onSubmit={handleSubmit}>
+                        <h2> Create A Topic</h2>
+                        < input type="text"
+                            placeholder="Enter Title of the Topic"
+                            name='topic'
+                            onChange={handleChange}
+                            value={data.topic}
+                            required
+                            className='input'
+                        />
+                        <textarea type="text" name='description' value={data.description} onChange={handleChange} className='input1'></textarea>
+
+                        <button type="submit" onClick={handleSubmit} className='green_btn'>Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    )
 }
 export default Topic

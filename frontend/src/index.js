@@ -22,8 +22,8 @@ root.render(
           <Route path="register" element={<RegisterPage />}></Route>
           <Route path="login" element={<LoginPage />}></Route>
 
-          <Route path="getTopics" element={<Topics />}></Route>
-          <Route path="topic" element={<Topic />}></Route>
+          <Route path="dashboard" element={<Topics />}></Route>
+          <Route path="addtopic" element={<Topic />}></Route>
 
         </Route>
       </Routes>
