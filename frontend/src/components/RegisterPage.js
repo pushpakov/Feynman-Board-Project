@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import "./register.css"
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import url from "../config"
+import "./style.css"
 
-const Register = () => {
 
+const RegisterPage = () => {
     const navigate = useNavigate()
 
     const [user, setUser] = useState({
@@ -31,8 +32,11 @@ const Register = () => {
         }
     }
 
-    return (
-        <div className="register">
+
+
+return (
+        <div className="login-page">
+            <div className="form">
             <h1>FEYNMAN BOARD</h1>
             <br></br>
             <br></br>
@@ -41,10 +45,8 @@ const Register = () => {
             <input type="password" name="password" value={user.password} onChange={handleChange} placeholder="Enter your Password" ></input>
 
             <div className="button" onClick={register} >Register</div>
-            <div>or</div>
-            <div className="button" onClick={() => navigate("/login", { replace: true })}>Login</div>
+            </div>
         </div>
     )
 }
-
-export default Register   
+export default RegisterPage;
