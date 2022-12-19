@@ -36,23 +36,19 @@ const Topics = () => {
 
 
     return (
-        <div className='login-page'>
-            <nav className='form'>
-                <h1>FEYNMAN BOARD</h1>
-                <Link to="/addtopic">
-                    <button className='white_btn'>Add a new Topic</button>
-                </Link>
-            </nav>
-            <div className="login-page">
+        
+            <div className="contains">
+                <h1>FEYNMAN BOARD <Link to="/addtopic">
+                        <button className='btn'>Add a new Topic</button>
+                    </Link>
+                </h1>
                 {topic.map((val, index) => {
                     return <div className="eachCont" key={index} >
                         <h2>Topic : {val.topic}</h2>
                         <p>{val.description}</p>
-                        <h4>Understanding of the topics:</h4>{val.percentage +"%"}
+                        <h4>Understanding of the topics:{val.percentage +"%"}</h4>
                     </div>
                 })}
-            </div>
-            <nav className='footer'></nav>
         </div>
 
     );

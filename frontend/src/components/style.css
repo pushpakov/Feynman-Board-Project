@@ -263,12 +263,22 @@
 
 
   .eachCont {
-    margin: auto;
-    padding: 10px;
+    margin: 12px;
+    padding: 15px;
     background-color: bisque;
     align-items: center;
     border: 1px black solid;
     border-radius: 15px;
+}
+
+.eachCont h2 {
+    color: rgb(47, 45, 48);
+    font-size: 25px;
+    margin-top: 5px;
+    margin-left: 20px;
+    text-align: center;
+    color: black;
+
 }
 
 .eachCont h4 {
@@ -277,5 +287,29 @@
     margin-top: 5px;
     margin-left: 20px;
     text-align: center;
+    color: #ef3b3a;
+
+
+}
+
+.contains {
+    color: rgb(47, 45, 48);
+    font-size: 15px;
+    margin: 35px;
+}
+
+.contains .btn {
+    text-align: center;
+    position:sticky;
+    float: right;
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    background-color: white;
+    border-radius: 5px;
+    width: 370px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
 
 }
